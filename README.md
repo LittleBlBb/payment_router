@@ -7,6 +7,10 @@
 - PostgreSQL
 - Docker
 
+### Создание .env файла
+Необходимо добавить файл .env и прописать в нем
+системные переменные, например как в файле `.env.example`  
+
 ### Запуск PostgreSQL
 `docker compose up -d`
 
