@@ -1,0 +1,79 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-payments
+      author: LittleBlBb
+      changes:
+
+        - createTable:
+            tableName: orders
+            columns:
+              - column:
+                  name: order_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: created_at
+                  type: JAVA.SQL.TYPES.TIMESTAMP_WITH_TIMEZONE
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: payments
+            columns:
+              - column:
+                  name: payment_id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: order_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_payment_order
+                    referencedTableName: orders
+                    referencedColumnNames: order_id
+
+              - column:
+                  name: amount
+                  type: DECIMAL(19,4)
+                  constraints:
+                    nullable: false
+                    checkConstraint: "amount > 0"
+
+              - column:
+                  name: currency
+                  type: VARCHAR(3)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: status
+                  type: VARCHAR(25)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: created_at
+                  type: JAVA.SQL.TYPES.TIMESTAMP_WITH_TIMEZONE
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: updated_at
+                  type: JAVA.SQL.TYPES.TIMESTAMP_WITH_TIMEZONE
+                  constraints:
+                    nullable: false
+
+        - createIndex:
+            indexName: idx_payments_order_id
+            tableName: payments
+            columns:
+              - column:
+                  name: order_id

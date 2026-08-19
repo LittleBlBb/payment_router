@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/payment_router
+    username: payment_router
+    password: payment_router
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
