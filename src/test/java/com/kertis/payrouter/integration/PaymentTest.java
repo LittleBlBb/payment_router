@@ -54,8 +54,12 @@ public class PaymentTest {
 
         assertNotNull(result);
         assertEquals(paymentId, result.getPaymentId());
-        assertEquals(new BigDecimal("10.5"), result.getAmount());
-        assertEquals(PaymentStatus.CREATED, result.getStatus());
+        assertEquals(payment.getAmount(), result.getAmount());
+        assertEquals(payment.getStatus(), result.getStatus());
+        assertEquals(payment.getCurrency(), result.getCurrency());
+        assertEquals(payment.getOrderId(), result.getOrderId());
+        assertEquals(payment.getCreatedAt(), result.getCreatedAt());
+        assertEquals(payment.getUpdatedAt(), result.getUpdatedAt());
 
     }
 
