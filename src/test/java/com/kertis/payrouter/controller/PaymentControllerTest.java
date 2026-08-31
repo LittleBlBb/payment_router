@@ -3,6 +3,7 @@ package com.kertis.payrouter.controller;
 import com.kertis.payrouter.dto.CreatePaymentRequest;
 import com.kertis.payrouter.dto.PaymentResponse;
 import com.kertis.payrouter.exception.OrderNotFoundException;
+import com.kertis.payrouter.exception.ValidationException;
 import com.kertis.payrouter.model.Currency;
 import com.kertis.payrouter.model.PaymentStatus;
 import com.kertis.payrouter.service.interfaces.PaymentService;
@@ -79,6 +80,26 @@ public class PaymentControllerTest {
                 .andExpect(status().isBadRequest());
 
         verifyNoInteractions(paymentService);
+    }
+
+    @Test
+    void shouldReturn400WhenAmountIncorrect() throws Exception {
+
+        when(paymentService.createPayment(any(CreatePaymentRequest.class)))
+                .thenThrow(new ValidationException("amount should be positive"));
+
+        mockMvc.perform(post("/api/v1/payments")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(
+                                """
+                                {
+                                    "orderId": 1,
+                                    "amount": 0,
+                                    "currency": "RUB"
+                                }
+                                """
+                        ))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
