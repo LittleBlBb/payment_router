@@ -31,7 +31,7 @@ public class PaymentResponse {
         currency = payment.getCurrency();
         status = payment.getStatus();
         createdAt = payment.getCreatedAt();
-        updatedAt = payment.getCreatedAt();
+        updatedAt = payment.getUpdatedAt();
 
     }
 }

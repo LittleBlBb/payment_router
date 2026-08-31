@@ -2,6 +2,8 @@ package com.kertis.payrouter.service.implementation;
 
 import com.kertis.payrouter.dto.CreatePaymentRequest;
 import com.kertis.payrouter.dto.PaymentResponse;
+import com.kertis.payrouter.exception.OrderNotFoundException;
+import com.kertis.payrouter.exception.ValidationException;
 import com.kertis.payrouter.model.Currency;
 import com.kertis.payrouter.model.Order;
 import com.kertis.payrouter.model.Payment;
@@ -28,11 +30,12 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentResponse createPayment(CreatePaymentRequest request) {
 
         Order order = orderRepository.findById(request.getOrderId()).orElseThrow(() ->
-                new IllegalArgumentException("order not found"));
+                new OrderNotFoundException("order not found"));
 
         BigDecimal amount = request.getAmount();
 
-        if (amount.doubleValue() < 0) throw new IllegalArgumentException("amount should be positive");
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) < 1)
+            throw new ValidationException("amount should be positive");
 
         Currency currency = request.getCurrency();
 

@@ -3,6 +3,7 @@ package com.kertis.payrouter.controller;
 import com.kertis.payrouter.dto.CreatePaymentRequest;
 import com.kertis.payrouter.dto.PaymentResponse;
 import com.kertis.payrouter.service.interfaces.PaymentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,8 +17,8 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-    @PostMapping("create_payment")
-    public PaymentResponse createPayment(@RequestBody CreatePaymentRequest request){
+    @PostMapping
+    public PaymentResponse createPayment(@Valid @RequestBody CreatePaymentRequest request){
 
         return paymentService.createPayment(request);
     }
