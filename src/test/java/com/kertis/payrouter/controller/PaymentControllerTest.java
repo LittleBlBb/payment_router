@@ -55,7 +55,7 @@ public class PaymentControllerTest {
                             "currency": "RUB"
                         }
                         """))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.paymentId").value(paymentId.toString()))
                 .andExpect(jsonPath("$.amount").value(10.50))
                 .andExpect(jsonPath("$.currency").value("RUB"))
