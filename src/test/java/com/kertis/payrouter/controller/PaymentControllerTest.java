@@ -2,7 +2,7 @@ package com.kertis.payrouter.controller;
 
 import com.kertis.payrouter.dto.CreatePaymentRequest;
 import com.kertis.payrouter.dto.PaymentResponse;
-import com.kertis.payrouter.exception.OrderNotFoundException;
+import com.kertis.payrouter.exception.NotFoundException;
 import com.kertis.payrouter.exception.ValidationException;
 import com.kertis.payrouter.model.Currency;
 import com.kertis.payrouter.model.PaymentStatus;
@@ -106,7 +106,7 @@ public class PaymentControllerTest {
     void shouldReturn404WhenOrderNotFound() throws Exception{
 
         when(paymentService.createPayment(any(CreatePaymentRequest.class)))
-                .thenThrow(new OrderNotFoundException("order not found"));
+                .thenThrow(new NotFoundException("order not found"));
 
         mockMvc.perform(post("/api/v1/payments")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)

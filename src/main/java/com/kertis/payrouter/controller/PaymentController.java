@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/v1/payments")
 @RequiredArgsConstructor
@@ -20,5 +22,11 @@ public class PaymentController {
     public PaymentResponse createPayment(@Valid @RequestBody CreatePaymentRequest request){
 
         return paymentService.createPayment(request);
+    }
+
+    @PostMapping("/{paymentId}/process")
+    public PaymentResponse process(@PathVariable UUID paymentId){
+
+        return paymentService.processPayment(paymentId);
     }
 }
