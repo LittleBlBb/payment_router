@@ -3,7 +3,7 @@ package com.kertis.payrouter.service.implementation;
 import com.kertis.payrouter.dto.CreatePaymentRequest;
 import com.kertis.payrouter.dto.PaymentGatewayResult;
 import com.kertis.payrouter.dto.PaymentResponse;
-import com.kertis.payrouter.exception.AlreadyInProcessingOrCompleted;
+import com.kertis.payrouter.exception.AlreadyInProcessingOrCompletedException;
 import com.kertis.payrouter.exception.NotFoundException;
 import com.kertis.payrouter.exception.ValidationException;
 import com.kertis.payrouter.model.Currency;
@@ -12,8 +12,7 @@ import com.kertis.payrouter.model.Payment;
 import com.kertis.payrouter.model.PaymentStatus;
 import com.kertis.payrouter.repository.OrderRepository;
 import com.kertis.payrouter.repository.PaymentRepository;
-import com.kertis.payrouter.service.MockPaymentGateway;
-import com.kertis.payrouter.service.PaymentGateway;
+import com.kertis.payrouter.service.interfaces.PaymentGateway;
 import com.kertis.payrouter.service.interfaces.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +28,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
+    private final PaymentGateway paymentGateway;
 
     @Override
     @Transactional
@@ -63,7 +63,7 @@ public class PaymentServiceImpl implements PaymentService {
                 new NotFoundException("payment not found"));
 
         if (!payment.getStatus().equals(PaymentStatus.CREATED)){
-            throw new AlreadyInProcessingOrCompleted("payment already in process or completed");
+            throw new AlreadyInProcessingOrCompletedException("payment already in process or completed");
         }
 
         payment.setStatus(PaymentStatus.PROCESSING);
@@ -71,12 +71,10 @@ public class PaymentServiceImpl implements PaymentService {
 
         paymentRepository.save(payment);
 
-        PaymentGateway paymentGateway = new PaymentGateway(new MockPaymentGateway());
-
         PaymentGatewayResult result = paymentGateway.processPayment(payment);
 
         payment.setStatus(result.getStatus());
-        payment.setUpdatedAt(result.getUpdatedAt());
+        payment.setUpdatedAt(Instant.now());
 
         return new PaymentResponse(paymentRepository.save(payment));
     }

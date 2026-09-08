@@ -15,22 +15,9 @@ import java.util.UUID;
 @Getter
 @Setter
 public class PaymentGatewayResult {
-    private UUID paymentId;
-    private Long orderId;
-    private BigDecimal amount;
-    private Currency currency;
     private PaymentStatus status;
-    private Instant createdAt;
-    private Instant updatedAt;
 
-    public PaymentGatewayResult(Payment payment) {
-        paymentId = payment.getPaymentId();
-        orderId = payment.getOrderId();
-        amount = payment.getAmount();
-        currency = payment.getCurrency();
-        status = payment.getStatus();
-        createdAt = payment.getCreatedAt();
-        updatedAt = payment.getUpdatedAt();
-
+    public PaymentGatewayResult(PaymentStatus status) {
+        this.status = status;
     }
 }
