@@ -62,5 +62,4 @@ public class PaymentTest {
         assertEquals(payment.getUpdatedAt(), result.getUpdatedAt());
 
     }
-
 }

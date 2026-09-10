@@ -5,7 +5,11 @@ import com.kertis.payrouter.dto.PaymentResponse;
 import com.kertis.payrouter.exception.NotFoundException;
 import com.kertis.payrouter.exception.ValidationException;
 import com.kertis.payrouter.model.Currency;
+import com.kertis.payrouter.model.Order;
+import com.kertis.payrouter.model.Payment;
 import com.kertis.payrouter.model.PaymentStatus;
+import com.kertis.payrouter.repository.OrderRepository;
+import com.kertis.payrouter.repository.PaymentRepository;
 import com.kertis.payrouter.service.interfaces.PaymentService;
 import org.springframework.http.MediaType;
 import org.junit.jupiter.api.Test;
@@ -15,6 +19,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -121,6 +126,28 @@ public class PaymentControllerTest {
                         ))
                 .andExpect(status().isNotFound());
 
+    }
+
+    @Test
+    void shouldReturn200AndPaymentStatusSuccess() throws Exception{
+
+        UUID uuid = UUID.randomUUID();
+
+        PaymentResponse response = new PaymentResponse();
+        response.setPaymentId(uuid);
+        response.setAmount(new BigDecimal("100.00"));
+        response.setCurrency(Currency.RUB);
+        response.setStatus(PaymentStatus.SUCCESS);
+
+        when(paymentService.processPayment(uuid))
+                .thenReturn(response);
+
+        mockMvc.perform(post("/api/v1/payments/" + uuid + "/process"))
+                .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.status").value("SUCCESS"))
+                        .andExpect(jsonPath("$.paymentId").value(uuid.toString()));
+
+        verify(paymentService).processPayment(uuid);
     }
 
 }

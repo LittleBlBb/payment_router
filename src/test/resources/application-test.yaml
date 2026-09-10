@@ -7,3 +7,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+
+mock:
+  gateway:
+    max-amount: ${MOCK_GATEWAY_MAX_AMOUNT:500000.00}

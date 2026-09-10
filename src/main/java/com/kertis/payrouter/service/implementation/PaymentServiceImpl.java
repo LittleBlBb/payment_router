@@ -57,6 +57,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @Transactional
     public PaymentResponse processPayment(UUID uuid) {
 
         Payment payment = paymentRepository.findById(uuid).orElseThrow(() ->

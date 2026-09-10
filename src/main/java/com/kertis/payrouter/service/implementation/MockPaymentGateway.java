@@ -12,12 +12,12 @@ import java.math.BigDecimal;
 @Service
 public class MockPaymentGateway implements PaymentGateway {
 
-    @Value("{$MOCK_GATEWAY_MAX_AMOUNT}")
-    private BigDecimal MOCK_GATEWAY_MAX_AMOUNT;
+    @Value("${mock.gateway.max-amount}")
+    private BigDecimal mockGatewayMaxAmount;
 
     @Override
     public PaymentGatewayResult processPayment(Payment payment) {
-        if (payment.getAmount().compareTo(MOCK_GATEWAY_MAX_AMOUNT) > 1) return new PaymentGatewayResult(PaymentStatus.FAILED);
+        if (payment.getAmount().compareTo(mockGatewayMaxAmount) > 0) return new PaymentGatewayResult(PaymentStatus.FAILED);
         else return new PaymentGatewayResult(PaymentStatus.SUCCESS);
     }
 }
